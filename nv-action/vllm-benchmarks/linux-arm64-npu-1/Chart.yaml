@@ -1,0 +1,9 @@
+apiVersion: v2
+name: linux-arm64-npu-1
+version: 0.10.1
+dependencies:
+  - name: gha-runner-scale-set
+    version: 0.10.1
+    repository: oci://ghcr.nju.edu.cn/actions/actions-runner-controller-charts
+
+
