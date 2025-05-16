@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    everest.io/path: /custom-index
+    everest.io/reclaim-policy: retain-volume-only
+    everest.io/sfsturbo-share-id: 39a33a00-3be8-4345-8079-63cf23a44a88
+    everest.io/volume-as: absolute-path变
+    pvc-can-cleanup: 'true'
+  name: custom-index
+  namespace: nv-action
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Mi
+  storageClassName: csi-sfsturbo

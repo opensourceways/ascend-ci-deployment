@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pod-template-npu-4
+  namespace: nv-action
+data:
+  default.yaml: |
+    ---
+    apiVersion: v1
+    kind: PodTemplate
+    metadata:
+      annotations:
+        annotated-by: "extension"
+      labels:
+        labeled-by: "extension"
+    spec:
+      containers:
+        - name: $job
+          resources:
+            limits:
+              cpu: "92"
+              huawei.com/ascend-1980: "4"
+              memory: 256Gi
+            requests:
+              cpu: "92"
+              huawei.com/ascend-1980: "4"
+              memory: 128Gi
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /root/.cache
+            - name: driver-tools
+              mountPath: /usr/local/Ascend/driver/tools
+              readOnly: true
+            - name: check-npu
+              mountPath: /check-npu
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    # 配置github代理
+                    cat <<EOF >> /root/.gitconfig
+                    [url "https://gh-proxy.test.osinfra.cn/https://github.com/"]
+                        insteadOf = https://github.com/
+                    EOF
+      volumes:
+        - name: shared-volume
+          persistentVolumeClaim:
+            claimName: nv-action-vllm-benchmarks-v2
+        - name: check-npu
+          configMap:
+            name: check-npu
+        - name: driver-tools
+          hostPath:
+            path: /usr/local/Ascend/driver/tools
+

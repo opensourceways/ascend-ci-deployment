@@ -1,0 +1,19 @@
+resources:
+- namespace.yaml
+- custom-runner-container-hook-pvc.yaml
+- local-storage-pvc.yaml
+- pre-execute-script-check-npu-configmap.yaml
+- runner-pod-permission.yaml
+- container-job-pod-template-npu-1-configmap.yaml
+- container-job-pod-template-npu-2-configmap.yaml
+- container-job-pod-template-npu-4-configmap.yaml
+- container-job-pod-template-npu-8-configmap.yaml
+namespace: nv-action
+apiVersion: kustomize.config.k8s.io/v1beta1
+commonAnnotations:
+  kubernetes.ops.cluster: shanghai-icsl-cluster
+  kubernetes.ops.email: ""
+  kubernetes.ops.os.base: debian
+  kubernetes.ops.region: shanghai
+kind: Kustomization
+

@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pod-template-npu-8
+  namespace: vllm-project
+data:
+  default.yaml: |
+    ---
+    apiVersion: v1
+    kind: PodTemplate
+    metadata:
+      annotations:
+        annotated-by: "extension"
+      labels:
+        labeled-by: "extension"
+    spec:
+      containers:
+        - name: $job
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "184"
+              huawei.com/ascend-1980: "8"
+              memory: 512Gi
+            requests:
+              cpu: "184"
+              huawei.com/ascend-1980: "8"
+              memory: 256Gi
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /root/.cache
+            - name: driver-tools
+              mountPath: /usr/local/Ascend/driver/tools
+              readOnly: true
+            - name: check-npu
+              mountPath: /check-npu
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    # 配置github代理
+                    cat <<EOF >> /root/.gitconfig
+                    [url "https://gh-proxy.test.osinfra.cn/https://github.com/"]
+                        insteadOf = https://github.com/
+                    EOF
+      volumes:
+        - name: shared-volume
+          persistentVolumeClaim:
+            claimName: nv-action-vllm-benchmarks-v2
+        - name: driver-tools
+          hostPath:
+            path: /usr/local/Ascend/driver/tools
+        - name: check-npu
+          configMap:
+            name: check-npu
+

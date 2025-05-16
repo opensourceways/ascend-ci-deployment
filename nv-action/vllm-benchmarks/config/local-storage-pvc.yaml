@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    everest.io/path: /ascend-ci-share-nv-action-vllm-benchmarks
+    everest.io/reclaim-policy: retain-volume-only
+    everest.io/sfsturbo-share-id: 23021270-7ebf-43b2-925c-b1686da4868a
+    everest.io/volume-as: absolute-path
+    pvc-can-cleanup: 'true'
+  name: nv-action-vllm-benchmarks-v2
+  namespace: nv-action
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1200Gi
+  storageClassName: csi-sfsturbo
