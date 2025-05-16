@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nv-action-vllm-benchmarks-linux-arm64-npu-2
+  namespace: argocd
+spec:
+  destination:
+    namespace: nv-action
+    name: openmerlin-guiyang-003-cluster
+  project: vllm-guiyang-cluster
+  source:
+    path: nv-action/vllm-benchmarks/linux-arm64-npu-2
+    repoURL: https://github.com/opensourceways/ascend-ci-deployment.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true  
